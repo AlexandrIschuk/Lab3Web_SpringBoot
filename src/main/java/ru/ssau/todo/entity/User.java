@@ -2,6 +2,9 @@ package ru.ssau.todo.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -13,6 +16,12 @@ public class User {
 
     @Column(name = "username")
     private String username;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserRole> userRole = new ArrayList<>();
+
+    @OneToMany(mappedBy = "createdBy")
+    private List<Task> userTask = new ArrayList<>();
 
     public User() {
     }
