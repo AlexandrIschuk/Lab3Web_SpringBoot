@@ -18,7 +18,7 @@ public class UserRowMapper implements RowMapper<Task> {
         task.setId(rs.getLong("id"));
         task.setTitle(rs.getString("title"));
         task.setStatus(TaskStatus.valueOf(rs.getString("status")));
-        task.setCreatedBy(rs.getLong("createdBy"));
+        //task.setCreatedBy(rs.getLong("createdBy"));
         task.setCreatedAt(LocalDateTime.parse(rs.getString("createdAt"),formatter));
         return task;
     }

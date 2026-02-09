@@ -16,7 +16,7 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Task create(Task task){
+    /*public Task create(Task task){
         if(countActiveTasksByUserId(task.getCreatedBy()) >= 10){
             throw new IllegalStateException(
                     String.format(
@@ -27,7 +27,7 @@ public class TaskService {
             );
         }
        return taskRepository.create(task);
-    }
+    }*/
 
     public Optional<Task> findById(long id) {
         return taskRepository.findById(id);

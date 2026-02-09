@@ -44,14 +44,15 @@ public class TaskInMemoryRepository implements TaskRepository {
 
     @Override
     public List<Task> findAll(LocalDateTime from, LocalDateTime to, long userId) {
-        return storage.values().stream()
+        return null;
+        /*return storage.values().stream()
                 .filter(task -> task.getCreatedBy() == userId)
                 .filter(task -> {
                     LocalDateTime createdAt = task.getCreatedAt();
                     return (createdAt.isEqual(from) || createdAt.isAfter(from)) &&
                             (createdAt.isEqual(to) || createdAt.isBefore(to));
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
     }
 
     @Override
@@ -76,12 +77,13 @@ public class TaskInMemoryRepository implements TaskRepository {
 
     @Override
     public long countActiveTasksByUserId(long userId) {
-        return storage.values().stream()
+        return userId;
+        /*return storage.values().stream()
                 .filter(task -> task.getCreatedBy() == userId)
                 .filter(task -> {
                     TaskStatus status = task.getStatus();
                     return status == TaskStatus.OPEN || status == TaskStatus.IN_PROGRESS;
                 })
-                .count();
+                .count();*/
     }
 }

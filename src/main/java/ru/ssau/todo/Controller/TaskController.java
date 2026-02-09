@@ -26,7 +26,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @PostMapping
+    /*@PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Task> createTask(@RequestBody Task task) throws Exception {
         Task task1 = taskService.create(task);
@@ -38,7 +38,7 @@ public class TaskController {
         headers.setLocation(location);
         //return taskRepository.create(task);
         return new ResponseEntity<>(task1, headers, HttpStatus.CREATED);
-    }
+    }*/
 
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTaskById(@PathVariable long id) {
