@@ -1,18 +1,26 @@
 package ru.ssau.todo.entity;
 
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+
+
 @Embeddable
 public class CompositeKey implements Serializable {
-    private final Long userId;
-    private final Long roleId;
+    private Long userId;
+    private Long roleId;
 
     public CompositeKey(Long userId, Long roleId) {
         this.userId = userId;
         this.roleId = roleId;
+    }
+
+    public CompositeKey() {
     }
 
     @Override

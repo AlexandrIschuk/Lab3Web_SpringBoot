@@ -7,6 +7,7 @@ import ru.ssau.todo.entity.Task;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.ssau.todo.entity.TaskDto;
 import ru.ssau.todo.repository.TaskRepository;
 
 import java.net.URI;
@@ -28,7 +29,7 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Task> createTask(@RequestBody Task task) throws Exception {
+    public ResponseEntity<Task> createTask(@RequestBody TaskDto task) throws Exception {
         Task task1 = taskService.create(task);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -48,10 +49,10 @@ public class TaskController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-//    @GetMapping
-//    public List<Task> getTasks(@RequestParam LocalDateTime from, @RequestParam LocalDateTime to, @RequestParam Long userId) {
-//        return taskService.findAll(from, to, userId);
-//    }
+    @GetMapping
+    public List<Task> getTasks(@RequestParam LocalDateTime from, @RequestParam LocalDateTime to, @RequestParam Long userId) {
+        return taskService.findAll(from, to, userId);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Optional<Task>> updateTask(@PathVariable long id, @RequestBody Task task) {
@@ -70,12 +71,11 @@ public class TaskController {
         taskService.deleteById(id);
     }
 
-//    @GetMapping("/active/count")
-//    public Map<String, Long> countActiveTask(@RequestParam long userId) {
-//        long count = taskService.countActiveTasksByUserId(userId);
-//
-//        Map<String, Long> response = new HashMap<>();
-//        response.put("activeTasksCount", count);
-//        return response;
-//    }
+    @GetMapping("/active/count")
+    public Map<String, Long> countActiveTask(@RequestParam long userId) {
+        long count = taskService.countActiveTasksByUserId(userId);
+        Map<String, Long> response = new HashMap<>();
+        response.put("activeTasksCount", count);
+        return response;
+    }
 }

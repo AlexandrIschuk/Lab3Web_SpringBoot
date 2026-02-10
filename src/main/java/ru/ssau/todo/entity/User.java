@@ -1,12 +1,18 @@
 package ru.ssau.todo.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "\"user\"")
 public class User {
 
     @Column(name = "user_id")
@@ -17,40 +23,11 @@ public class User {
     @Column(name = "username")
     private String username;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserRole> userRole = new ArrayList<>();
+//    @OneToMany(cascade = CascadeType.ALL)
+//
+//    private List<UserRole> userRole = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "createdBy")
+//    private List<Task> userTask = new ArrayList<>();
 
-    @OneToMany(mappedBy = "createdBy")
-    private List<Task> userTask = new ArrayList<>();
-
-    public User() {
-    }
-
-    public User(Long userId, String username) {
-        this.userId = userId;
-        this.username = username;
-    }
-
-    public User(Long userId, List<Task> userTask, List<UserRole> userRole, String username) {
-        this.userId = userId;
-        this.userTask = userTask;
-        this.userRole = userRole;
-        this.username = username;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 }

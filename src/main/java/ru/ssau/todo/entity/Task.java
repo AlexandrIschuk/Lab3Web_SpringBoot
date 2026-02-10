@@ -1,10 +1,16 @@
 package ru.ssau.todo.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "task")
 public class Task {
@@ -20,43 +26,12 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private User createdBy;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public Task() {
-    }
-
-    public Task(Long id, String title, TaskStatus status, User createdBy, LocalDateTime createdAt) {
-        this.id = id;
-        this.title = title;
-        this.status = status;
-        this.createdBy = createdBy;
-        this.createdAt = createdAt;
-    }
-
-    public Task(String title, TaskStatus status, User createdBy) {
-        this.title = title;
-        this.status = status;
-        this.createdBy = createdBy;
-    }
-
-    public Long getId() {return id; };
-    public void setId(Long id) {this.id = id;}
-
-    public String getTitle() {return title;}
-    public void setTitle(String title) {this.title = title;}
-
-    public TaskStatus getStatus() {return status;}
-    public void setStatus(TaskStatus status) {this.status = status;}
-
-    public User getCreatedBy() {return createdBy;}
-    public void setCreatedBy(User createdBy) {this.createdBy = createdBy;}
-
-    public LocalDateTime getCreatedAt() {return createdAt; }
-    public void setCreatedAt(LocalDateTime createAt) {this.createdAt = createAt;}
 }
 

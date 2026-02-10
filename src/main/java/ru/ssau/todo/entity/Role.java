@@ -1,7 +1,13 @@
 package ru.ssau.todo.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "role")
 public class Role {
@@ -13,30 +19,5 @@ public class Role {
     @Column(name = "rolename")
     @Enumerated(EnumType.STRING)
     private Roles roleName;
-
-    public Role() {
-
-    }
-
-    public Role(Long roleId, Roles roleName) {
-        this.roleId = roleId;
-        this.roleName = roleName;
-    }
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public Roles getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(Roles roleName) {
-        this.roleName = roleName;
-    }
 
 }

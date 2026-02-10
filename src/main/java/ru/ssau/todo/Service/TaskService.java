@@ -2,6 +2,7 @@ package ru.ssau.todo.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ssau.todo.entity.Task;
+import ru.ssau.todo.entity.TaskDto;
 import ru.ssau.todo.entity.User;
 import ru.ssau.todo.repository.TaskRepository;
 import java.time.LocalDateTime;
@@ -16,44 +17,48 @@ public class TaskService {
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
+    MappingUtils mappingUtils = new MappingUtils();
 
-    public Task create(Task task){
-//        if(countActiveTasksByUserId(task.getCreatedBy().getUserId()) >= 10){
-//            throw new IllegalStateException(
-//                    String.format(
-//                            "User with id %d cannot have more than 10 active tasks. Current count: %d",
-//                            task.getCreatedBy().getUserId(),
-//                            countActiveTasksByUserId(task.getCreatedBy().getUserId())
-//                    )
-//            );
-//        }
-       return taskRepository.save(task);
+    public Task create(TaskDto task){
+        if(countActiveTasksByUserId(task.getCreatedBy()) >= 10){
+            throw new IllegalStateException(
+                    String.format(
+                            "User with id %d cannot have more than 10 active tasks. Current count: %d",
+                            task.getCreatedBy(),
+                            countActiveTasksByUserId(task.getCreatedBy())
+                    )
+            );
+        }
+       return taskRepository.save(mappingUtils.mapToTaskEntity(task));
     }
 
     public Optional<Task> findById(long id) {
         return taskRepository.findById(id);
     }
 
-//    public List<Task> findAll(LocalDateTime from, LocalDateTime to, long userId) {
-//        return taskRepository.findAll(from,to,userId);
-//
-//    }
+    public List<Task> findAll(LocalDateTime from, LocalDateTime to, long userId) {
+        return taskRepository.findAllFilter(from,to,userId);
+
+    }
 
     public void update(Task task) throws Exception {
-        taskRepository.save(task);
+        Task task1 = taskRepository.findById(task.getId()).orElseThrow();
+        task1.setTitle(task.getTitle());
+        task1.setStatus(task.getStatus());
+        taskRepository.save(task1);
     }
 
     public void deleteById(long id) {
-//        Optional<Task> task = taskRepository.findById(id);
-//        Optional<LocalDateTime> time = task.map(Task::getCreatedAt);
-//        Boolean flag = time.map(LocalDateTime::isAfter(LocalDateTime.now().minusMinutes(5))).orElse();
-//        if(){
-//            throw new IllegalStateException("The task was created less than 5 minutes ago.");
-//        }
+        Task task = taskRepository.findById(id).orElseThrow();
+        if(task.getCreatedAt().isAfter(LocalDateTime.now().minusMinutes(5))){
+            throw new IllegalStateException("The task was created less than 5 minutes ago.");
+        }
         taskRepository.deleteById(id);
 
     }
-//    public long countActiveTasksByUserId(long userId) {
-//         return taskRepository.countActiveTasksByUserId(userId);
-//    }
+    public long countActiveTasksByUserId(long userId) {
+        User user = new User();
+        user.setUserId(userId);
+         return taskRepository.countActiveTasksByUserId(user);
+    }
 }
