@@ -26,6 +26,18 @@ public class User {
     public User() {
     }
 
+    public User(Long userId, String username) {
+        this.userId = userId;
+        this.username = username;
+    }
+
+    public User(Long userId, List<Task> userTask, List<UserRole> userRole, String username) {
+        this.userId = userId;
+        this.userTask = userTask;
+        this.userRole = userRole;
+        this.username = username;
+    }
+
     public Long getUserId() {
         return userId;
     }

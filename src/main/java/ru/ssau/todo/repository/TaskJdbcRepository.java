@@ -1,3 +1,4 @@
+/*
 package ru.ssau.todo.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,3 +103,4 @@ public class TaskJdbcRepository implements TaskRepository{
         return namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
     }
 }
+*/

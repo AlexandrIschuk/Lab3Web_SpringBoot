@@ -30,6 +30,20 @@ public class Task {
     public Task() {
     }
 
+    public Task(Long id, String title, TaskStatus status, User createdBy, LocalDateTime createdAt) {
+        this.id = id;
+        this.title = title;
+        this.status = status;
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
+    }
+
+    public Task(String title, TaskStatus status, User createdBy) {
+        this.title = title;
+        this.status = status;
+        this.createdBy = createdBy;
+    }
+
     public Long getId() {return id; };
     public void setId(Long id) {this.id = id;}
 

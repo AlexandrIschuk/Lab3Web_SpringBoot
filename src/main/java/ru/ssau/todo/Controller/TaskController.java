@@ -26,7 +26,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    /*@PostMapping
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Task> createTask(@RequestBody Task task) throws Exception {
         Task task1 = taskService.create(task);
@@ -38,7 +38,7 @@ public class TaskController {
         headers.setLocation(location);
         //return taskRepository.create(task);
         return new ResponseEntity<>(task1, headers, HttpStatus.CREATED);
-    }*/
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTaskById(@PathVariable long id) {
@@ -48,10 +48,10 @@ public class TaskController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping
-    public List<Task> getTasks(@RequestParam LocalDateTime from, @RequestParam LocalDateTime to, @RequestParam Long userId) {
-        return taskService.findAll(from, to, userId);
-    }
+//    @GetMapping
+//    public List<Task> getTasks(@RequestParam LocalDateTime from, @RequestParam LocalDateTime to, @RequestParam Long userId) {
+//        return taskService.findAll(from, to, userId);
+//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Optional<Task>> updateTask(@PathVariable long id, @RequestBody Task task) {
@@ -70,12 +70,12 @@ public class TaskController {
         taskService.deleteById(id);
     }
 
-    @GetMapping("/active/count")
-    public Map<String, Long> countActiveTask(@RequestParam long userId) {
-        long count = taskService.countActiveTasksByUserId(userId);
-
-        Map<String, Long> response = new HashMap<>();
-        response.put("activeTasksCount", count);
-        return response;
-    }
+//    @GetMapping("/active/count")
+//    public Map<String, Long> countActiveTask(@RequestParam long userId) {
+//        long count = taskService.countActiveTasksByUserId(userId);
+//
+//        Map<String, Long> response = new HashMap<>();
+//        response.put("activeTasksCount", count);
+//        return response;
+//    }
 }
