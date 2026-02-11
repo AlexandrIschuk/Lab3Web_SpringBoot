@@ -29,8 +29,8 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Task> createTask(@RequestBody TaskDto task) throws Exception {
-        Task task1 = taskService.create(task);
+    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task) throws Exception {
+        TaskDto task1 = taskService.create(task);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(task1.getId())
@@ -42,7 +42,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable long id) {
+    public ResponseEntity<TaskDto> getTaskById(@PathVariable long id) {
 
         return taskService.findById(id)
                 .map(ResponseEntity::ok)
@@ -50,12 +50,12 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getTasks(@RequestParam LocalDateTime from, @RequestParam LocalDateTime to, @RequestParam Long userId) {
+    public List<TaskDto> getTasks(@RequestParam LocalDateTime from, @RequestParam LocalDateTime to, @RequestParam Long userId) {
         return taskService.findAll(from, to, userId);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Optional<Task>> updateTask(@PathVariable long id, @RequestBody Task task) {
+    public ResponseEntity<Optional<TaskDto>> updateTask(@PathVariable long id, @RequestBody Task task) {
         try {
             task.setId(id);
             taskService.update(task);

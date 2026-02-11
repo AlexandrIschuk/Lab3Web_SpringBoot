@@ -6,8 +6,10 @@ import ru.ssau.todo.entity.TaskDto;
 import ru.ssau.todo.entity.User;
 import ru.ssau.todo.repository.TaskRepository;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -19,7 +21,7 @@ public class TaskService {
     }
     MappingUtils mappingUtils = new MappingUtils();
 
-    public Task create(TaskDto task){
+    public TaskDto create(TaskDto task){
         if(countActiveTasksByUserId(task.getCreatedBy()) >= 10){
             throw new IllegalStateException(
                     String.format(
@@ -29,15 +31,18 @@ public class TaskService {
                     )
             );
         }
-       return taskRepository.save(mappingUtils.mapToTaskEntity(task));
+       return mappingUtils.mapToTaskDto(taskRepository.save(mappingUtils.mapToTaskEntity(task)));
     }
 
-    public Optional<Task> findById(long id) {
-        return taskRepository.findById(id);
+    public Optional<TaskDto> findById(long id) {
+        return Optional.ofNullable(mappingUtils.mapToTaskDto(taskRepository.findById(id).orElseThrow()));
     }
 
-    public List<Task> findAll(LocalDateTime from, LocalDateTime to, long userId) {
-        return taskRepository.findAllFilter(from,to,userId);
+    public List<TaskDto> findAll(LocalDateTime from, LocalDateTime to, long userId) {
+        List<Task> tasks = taskRepository.findAllFilter(from, to, userId);
+        return tasks.stream()
+                .map(mappingUtils::mapToTaskDto)
+                .collect(Collectors.toList());
 
     }
 

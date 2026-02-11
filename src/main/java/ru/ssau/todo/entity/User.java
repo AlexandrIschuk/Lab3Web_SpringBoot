@@ -1,5 +1,7 @@
 package ru.ssau.todo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,11 +25,12 @@ public class User {
     @Column(name = "username")
     private String username;
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//
-//    private List<UserRole> userRole = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "createdBy")
-//    private List<Task> userTask = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> role;
+
+    //@JsonIgnore
+    @OneToMany(mappedBy = "createdBy")
+    private List<Task> task;
 
 }
