@@ -1,6 +1,4 @@
 package ru.ssau.todo.entity;
-
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;

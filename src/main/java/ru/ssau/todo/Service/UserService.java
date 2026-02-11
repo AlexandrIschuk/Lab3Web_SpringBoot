@@ -1,10 +1,8 @@
 package ru.ssau.todo.Service;
 
 import org.springframework.stereotype.Service;
-import ru.ssau.todo.entity.User;
 import ru.ssau.todo.entity.UserDto;
 import ru.ssau.todo.repository.UserRepository;
-
 import java.util.Optional;
 
 @Service

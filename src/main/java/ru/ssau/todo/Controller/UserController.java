@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.ssau.todo.Service.UserService;
-import ru.ssau.todo.entity.User;
 import ru.ssau.todo.entity.UserDto;
 
 @Controller

@@ -5,19 +5,13 @@ import ru.ssau.todo.entity.Task;
 import ru.ssau.todo.entity.TaskDto;
 import ru.ssau.todo.entity.User;
 import ru.ssau.todo.entity.UserDto;
-import ru.ssau.todo.repository.TaskRepository;
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
-
 @Service
 public class MappingUtils {
-    TaskRepository taskRepository;
-    //из entity в dto
     public TaskDto mapToTaskDto(Task entity){
         TaskDto dto = new TaskDto();
         dto.setId(entity.getId());
@@ -27,7 +21,6 @@ public class MappingUtils {
         dto.setCreatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         return dto;
     }
-    //из dto в entity
     public Task mapToTaskEntity(TaskDto dto){
         Task entity = new Task();
         User user = new User();

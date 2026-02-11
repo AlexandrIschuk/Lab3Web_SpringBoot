@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.todo.entity.TaskDto;
-import ru.ssau.todo.repository.TaskRepository;
-
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.HashMap;

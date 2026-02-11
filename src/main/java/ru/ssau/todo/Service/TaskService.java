@@ -1,4 +1,5 @@
 package ru.ssau.todo.Service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ssau.todo.entity.Task;
@@ -6,7 +7,6 @@ import ru.ssau.todo.entity.TaskDto;
 import ru.ssau.todo.entity.User;
 import ru.ssau.todo.repository.TaskRepository;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
