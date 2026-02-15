@@ -1,4 +1,4 @@
-package ru.ssau.todo.Service;
+package ru.ssau.todo.service;
 
 import org.springframework.stereotype.Service;
 import ru.ssau.todo.entity.Task;

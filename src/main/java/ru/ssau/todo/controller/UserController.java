@@ -1,11 +1,11 @@
-package ru.ssau.todo.Controller;
+package ru.ssau.todo.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.ssau.todo.Service.UserService;
+import ru.ssau.todo.service.UserService;
 import ru.ssau.todo.entity.UserDto;
 
 @Controller

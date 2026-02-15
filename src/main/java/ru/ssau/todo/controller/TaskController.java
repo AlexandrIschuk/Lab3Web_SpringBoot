@@ -1,9 +1,8 @@
-package ru.ssau.todo.Controller;
+package ru.ssau.todo.controller;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.ssau.todo.Service.TaskService;
-import ru.ssau.todo.entity.Task;
+import ru.ssau.todo.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,7 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task) throws Exception {
+    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task){
         TaskDto task1 = taskService.create(task);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -35,7 +34,6 @@ public class TaskController {
                 .toUri();
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
-        //return taskRepository.create(task);
         return new ResponseEntity<>(task1, headers, HttpStatus.CREATED);
     }
 
@@ -48,19 +46,16 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskDto> getTasks(@RequestParam LocalDateTime from, @RequestParam LocalDateTime to, @RequestParam Long userId) {
+    public List<TaskDto> getTasks(@RequestParam(required = false) LocalDateTime from, @RequestParam(required = false) LocalDateTime to, @RequestParam Long userId) {
         return taskService.findAll(from, to, userId);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Optional<TaskDto>> updateTask(@PathVariable long id, @RequestBody Task task) {
-        try {
-            task.setId(id);
-            taskService.update(task);
-            return ResponseEntity.ok(taskService.findById(id));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Optional<TaskDto>> updateTask(@PathVariable long id, @RequestBody TaskDto task) {
+        task.setId(id);
+        taskService.update(task);
+        return ResponseEntity.ok(taskService.findById(id));
+
     }
 
     @DeleteMapping("/{id}")

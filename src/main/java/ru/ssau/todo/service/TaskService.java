@@ -1,9 +1,9 @@
-package ru.ssau.todo.Service;
+package ru.ssau.todo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ssau.todo.entity.Task;
 import ru.ssau.todo.entity.TaskDto;
+import ru.ssau.todo.entity.TaskStatus;
 import ru.ssau.todo.entity.User;
 import ru.ssau.todo.repository.TaskRepository;
 import java.time.LocalDateTime;
@@ -15,23 +15,23 @@ import java.util.stream.Collectors;
 public class TaskService {
     private final TaskRepository taskRepository;
 
-    @Autowired
+    private int activeTasks = 10;
+
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
     MappingUtils mappingUtils = new MappingUtils();
 
-    public TaskDto create(TaskDto task){
-        if(countActiveTasksByUserId(task.getCreatedBy()) >= 10){
-            throw new IllegalStateException(
-                    String.format(
-                            "User with id %d cannot have more than 10 active tasks. Current count: %d",
-                            task.getCreatedBy(),
-                            countActiveTasksByUserId(task.getCreatedBy())
-                    )
-            );
+    private void validateCountOfActiveTasks(TaskDto task) {
+        long l = countActiveTasksByUserId(task.getCreatedBy());
+        if (l >= activeTasks) {
+            throw new IllegalStateException(String.format("User with id %d cannot have more than %d active tasks. Current count: %d", task.getCreatedBy(), activeTasks,l));
         }
-       return mappingUtils.mapToTaskDto(taskRepository.save(mappingUtils.mapToTaskEntity(task)));
+    }
+
+    public TaskDto create(TaskDto task){
+        validateCountOfActiveTasks(task);
+        return mappingUtils.mapToTaskDto(taskRepository.save(mappingUtils.mapToTaskEntity(task)));
     }
 
     public Optional<TaskDto> findById(long id) {
@@ -39,18 +39,32 @@ public class TaskService {
     }
 
     public List<TaskDto> findAll(LocalDateTime from, LocalDateTime to, long userId) {
+        if(from == null){
+            from = LocalDateTime.of(1970, 1,1,0,0);
+        }
+        if(to == null) {
+            to = LocalDateTime.now();
+        }
         List<Task> tasks = taskRepository.findAllFilter(from, to, userId);
         return tasks.stream()
                 .map(mappingUtils::mapToTaskDto)
                 .collect(Collectors.toList());
 
     }
-
-    public void update(Task task) throws Exception {
-        Task task1 = taskRepository.findById(task.getId()).orElseThrow();
+    public void taskUpdate(TaskDto task, Task task1){
         task1.setTitle(task.getTitle());
         task1.setStatus(task.getStatus());
         taskRepository.save(task1);
+    }
+
+    public void update(TaskDto task){
+        Task task1 = taskRepository.findById(task.getId()).orElseThrow();
+        if ((task.getStatus() == TaskStatus.DONE || task.getStatus() == TaskStatus.CLOSED) || ((task1.getStatus() == TaskStatus.IN_PROGRESS && task.getStatus() == TaskStatus.OPEN) || (task1.getStatus() == TaskStatus.OPEN && task.getStatus() == TaskStatus.IN_PROGRESS))) {
+            taskUpdate(task,task1);
+        } else {
+            validateCountOfActiveTasks(mappingUtils.mapToTaskDto(task1));
+            taskUpdate(task,task1);
+        }
     }
 
     public void deleteById(long id) {
