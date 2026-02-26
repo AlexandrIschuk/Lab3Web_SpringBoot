@@ -18,7 +18,7 @@ public class MappingUtils {
         dto.setTitle(entity.getTitle());
         dto.setStatus(entity.getStatus());
         dto.setCreatedBy(entity.getCreatedBy().getUserId());
-        dto.setCreatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        dto.setCreatedAt(entity.getCreatedAt());
         return dto;
     }
     public Task mapToTaskEntity(TaskDto dto){
@@ -29,7 +29,7 @@ public class MappingUtils {
         entity.setStatus(dto.getStatus());
         user.setUserId(dto.getCreatedBy());
         entity.setCreatedBy(user);
-        entity.setCreatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        entity.setCreatedAt(dto.getCreatedAt());
         return entity;
     }
 

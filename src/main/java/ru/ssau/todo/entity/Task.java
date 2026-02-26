@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CurrentTimestamp;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -29,6 +31,7 @@ public class Task {
     private User createdBy;
 
     @Column(name = "created_at")
+    @CurrentTimestamp
     private LocalDateTime createdAt;
 
 }
