@@ -7,6 +7,7 @@ import ru.ssau.todo.entity.TaskStatus;
 import ru.ssau.todo.entity.User;
 import ru.ssau.todo.repository.TaskRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,13 +15,14 @@ import java.util.stream.Collectors;
 @Service
 public class TaskService {
     private final TaskRepository taskRepository;
+    private final MappingUtils mappingUtils;
 
     private int activeTasks = 10;
 
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, MappingUtils mappingUtils) {
         this.taskRepository = taskRepository;
+        this.mappingUtils = mappingUtils;
     }
-    MappingUtils mappingUtils = new MappingUtils();
 
     private void validateCountOfActiveTasks(TaskDto task) {
         long l = countActiveTasksByUserId(task.getCreatedBy());
@@ -75,9 +77,12 @@ public class TaskService {
         taskRepository.deleteById(id);
 
     }
+
+    public List<Object[]> findStatusCount(){
+        return taskRepository.countTaskByStatus();
+    }
+
     public long countActiveTasksByUserId(long userId) {
-        User user = new User();
-        user.setUserId(userId);
-         return taskRepository.countActiveTasksByUserId(user);
+         return taskRepository.countActiveTasksByUserId(userId);
     }
 }

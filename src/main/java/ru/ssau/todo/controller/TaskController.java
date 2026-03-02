@@ -1,5 +1,6 @@
 package ru.ssau.todo.controller;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.ssau.todo.service.TaskService;
@@ -9,10 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.ssau.todo.entity.TaskDto;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/tasks")
@@ -24,17 +22,23 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task){
-        TaskDto task1 = taskService.create(task);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(task1.getId())
-                .toUri();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(location);
-        return new ResponseEntity<>(task1, headers, HttpStatus.CREATED);
+        try{
+            TaskDto task1 = taskService.create(task);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(task1.getId())
+                    .toUri();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(location);
+            return new ResponseEntity<>(task1, headers, HttpStatus.CREATED);
+        }
+        catch (DataAccessException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{id}")
@@ -48,6 +52,11 @@ public class TaskController {
     @GetMapping
     public List<TaskDto> getTasks(@RequestParam(required = false) LocalDateTime from, @RequestParam(required = false) LocalDateTime to, @RequestParam Long userId) {
         return taskService.findAll(from, to, userId);
+    }
+
+    @GetMapping("/stat")
+    public List<Object[]> getStatusStat() {
+        return taskService.findStatusCount();
     }
 
     @PutMapping("/{id}")

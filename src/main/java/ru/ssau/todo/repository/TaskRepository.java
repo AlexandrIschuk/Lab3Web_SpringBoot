@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.ssau.todo.entity.Task;
+import ru.ssau.todo.entity.TaskStatus;
 import ru.ssau.todo.entity.User;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,7 +26,8 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
     @Query (nativeQuery = true, value = "SELECT * FROM task WHERE created_by = :userId AND created_at >= :from AND created_at <= :to")
     List<Task> findAllFilter(LocalDateTime from, LocalDateTime to, long userId);
 
-
+    @Query(value = "SELECT t.status, COUNT(t) FROM Task t GROUP BY t.status")
+    List<Object[]> countTaskByStatus();
     /**
      * Подсчитывает количество "активных" задач для конкретного пользователя.
      * Активной считается задача, находящаяся в статусе OPEN или IN_PROGRESS.
@@ -33,6 +35,6 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
      * @param userId идентификатор пользователя.
      * @return количество активных задач.
      */
-    @Query(value = "SELECT COUNT(e.status) FROM Task e WHERE (e.status = OPEN OR e.status = IN_PROGRESS) AND e.createdBy = :userId")
-    long countActiveTasksByUserId(@Param("userId") User userId);
+    @Query(value = "SELECT COUNT(e.status) FROM Task e WHERE (e.status = OPEN OR e.status = IN_PROGRESS) AND e.createdBy.userId = :userId")
+    long countActiveTasksByUserId(@Param("userId") long userId);
 }
