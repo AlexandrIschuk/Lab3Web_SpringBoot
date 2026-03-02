@@ -1,6 +1,6 @@
 package ru.ssau.todo.entity;
 
-enum Roles {
+public enum UserRole {
     ROLE_ADMIN,
     ROLE_USER
 }

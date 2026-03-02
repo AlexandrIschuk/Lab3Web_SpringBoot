@@ -1,24 +1,24 @@
 package ru.ssau.todo.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import ru.ssau.todo.service.UserService;
+import org.springframework.web.bind.annotation.*;
+import ru.ssau.todo.service.CustomUserDetailsService;
 import ru.ssau.todo.entity.UserDto;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    UserService userService;
+    CustomUserDetailsService customUserDetailsService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<UserDto> getUserByUsername(@PathVariable String username){
-        return userService.findByUsername(username).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void UserRegister(@RequestBody UserDto userDto){
+        customUserDetailsService.UserRegister(userDto);
     }
 }

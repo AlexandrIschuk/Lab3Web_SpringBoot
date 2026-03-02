@@ -1,12 +1,9 @@
 package ru.ssau.todo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +18,10 @@ public class Role {
 
     @Column(name = "rolename")
     @Enumerated(EnumType.STRING)
-    private Roles roleName;
+    private UserRole roleName;
 
+//    @ManyToMany
+//    @JsonIgnore
+//    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+//    private List<User> user;
 }

@@ -37,6 +37,7 @@ public class MappingUtils {
         User entity = new User();
         entity.setUserId(dto.getUserId());
         entity.setUsername(dto.getUsername());
+        entity.setPassword(dto.getPassword());
         entity.setRole(dto.getRole());
         return entity;
     }
