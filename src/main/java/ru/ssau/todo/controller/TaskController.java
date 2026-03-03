@@ -1,8 +1,9 @@
 package ru.ssau.todo.controller;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.ssau.todo.service.CustomUserDetails;
 import ru.ssau.todo.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,36 +23,28 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task){
-        try{
-            TaskDto task1 = taskService.create(task);
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(task1.getId())
-                    .toUri();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(location);
-            return new ResponseEntity<>(task1, headers, HttpStatus.CREATED);
-        }
-        catch (DataAccessException e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        task.setCreatedBy(userDetails.getId());
+        task = taskService.create(task);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(task.getId())
+                .toUri();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(location);
+        return new ResponseEntity<>(task, headers, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDto> getTaskById(@PathVariable long id) {
-
-        return taskService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public TaskDto getTaskById(@PathVariable long id) {
+            return taskService.findById(id).orElseThrow();
     }
 
     @GetMapping
     public List<TaskDto> getTasks(@RequestParam(required = false) LocalDateTime from, @RequestParam(required = false) LocalDateTime to, @RequestParam Long userId) {
         return taskService.findAll(from, to, userId);
+
     }
 
     @GetMapping("/stat")
@@ -60,11 +53,10 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Optional<TaskDto>> updateTask(@PathVariable long id, @RequestBody TaskDto task) {
+    public Optional<TaskDto> updateTask(@PathVariable long id, @RequestBody TaskDto task) {
         task.setId(id);
         taskService.update(task);
-        return ResponseEntity.ok(taskService.findById(id));
-
+        return taskService.findById(id);
     }
 
     @DeleteMapping("/{id}")

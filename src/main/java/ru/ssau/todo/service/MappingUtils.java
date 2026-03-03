@@ -5,10 +5,6 @@ import ru.ssau.todo.entity.Task;
 import ru.ssau.todo.entity.TaskDto;
 import ru.ssau.todo.entity.User;
 import ru.ssau.todo.entity.UserDto;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MappingUtils {
@@ -41,16 +37,5 @@ public class MappingUtils {
         entity.setRole(dto.getRole());
         return entity;
     }
-    public UserDto mapToUserDto(User dto){
-        UserDto entity = new UserDto();
-        entity.setUserId(dto.getUserId());
-        entity.setUsername(dto.getUsername());
-        entity.setRole(dto.getRole());
-        List<Task> tasks = dto.getTask();
-        List<TaskDto> tasksDto = tasks.stream()
-                .map(this::mapToTaskDto)
-                .collect(Collectors.toList());
-        entity.setTask(tasksDto);
-        return entity;
-    }
+
 }

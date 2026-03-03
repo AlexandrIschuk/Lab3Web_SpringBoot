@@ -12,7 +12,7 @@
 4||10|C|G
 4||10|T|G</Grants>
       <ServerVersion>18.1</ServerVersion>
-      <StartupTime>1772448107</StartupTime>
+      <StartupTime>1772527120</StartupTime>
       <TimeZones>true ACDT
 true ACSST
 false ACST
@@ -4279,29 +4279,29 @@ false posixrules
     </sequence>
     <table id="278" parent="272" name="role">
       <DetailsLevel>2</DetailsLevel>
-      <ObjectId>16629</ObjectId>
-      <StateNumber>1021</StateNumber>
+      <ObjectId>16679</ObjectId>
+      <StateNumber>1084</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
     <table id="279" parent="272" name="task">
       <DetailsLevel>2</DetailsLevel>
-      <ObjectId>16602</ObjectId>
-      <StateNumber>970</StateNumber>
+      <ObjectId>16687</ObjectId>
+      <StateNumber>1083</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
     <table id="280" parent="272" name="user">
       <DetailsLevel>2</DetailsLevel>
-      <ObjectId>16615</ObjectId>
-      <StateNumber>1002</StateNumber>
+      <ObjectId>16669</ObjectId>
+      <StateNumber>1083</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
     <table id="281" parent="272" name="user_role">
       <DetailsLevel>2</DetailsLevel>
-      <ObjectId>16568</ObjectId>
-      <StateNumber>839</StateNumber>
+      <ObjectId>16701</ObjectId>
+      <StateNumber>1084</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
@@ -4309,177 +4309,194 @@ false posixrules
       <DefaultExpression>nextval(&apos;role_role_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>1021</StateNumber>
+      <StateNumber>1082</StateNumber>
       <StoredType>bigint|0s</StoredType>
-      <SequenceId>16628</SequenceId>
+      <SequenceId>16678</SequenceId>
       <TypeId>20</TypeId>
     </column>
     <column id="283" parent="278" name="rolename">
       <Position>2</Position>
-      <StateNumber>1021</StateNumber>
+      <StateNumber>1082</StateNumber>
       <StoredType>varchar(50)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
     <index id="284" parent="278" name="role_pkey">
       <ColNames>role_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16634</ObjectId>
+      <ObjectId>16684</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1021</StateNumber>
+      <StateNumber>1082</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
     <key id="285" parent="278" name="role_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16635</ObjectId>
+      <ObjectId>16685</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1021</StateNumber>
-      <UnderlyingIndexId>16634</UnderlyingIndexId>
+      <StateNumber>1082</StateNumber>
+      <UnderlyingIndexId>16684</UnderlyingIndexId>
     </key>
     <column id="286" parent="279" name="id">
       <DefaultExpression>nextval(&apos;task_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>970</StateNumber>
+      <StateNumber>1083</StateNumber>
       <StoredType>bigint|0s</StoredType>
-      <SequenceId>16601</SequenceId>
+      <SequenceId>16686</SequenceId>
       <TypeId>20</TypeId>
     </column>
     <column id="287" parent="279" name="title">
       <Position>2</Position>
-      <StateNumber>970</StateNumber>
+      <StateNumber>1083</StateNumber>
       <StoredType>varchar(100)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
     <column id="288" parent="279" name="status">
       <Position>3</Position>
-      <StateNumber>970</StateNumber>
+      <StateNumber>1083</StateNumber>
       <StoredType>varchar(20)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
     <column id="289" parent="279" name="created_by">
       <Position>4</Position>
-      <StateNumber>970</StateNumber>
+      <StateNumber>1083</StateNumber>
       <StoredType>bigint|0s</StoredType>
       <TypeId>20</TypeId>
     </column>
     <column id="290" parent="279" name="created_at">
       <Position>5</Position>
-      <StateNumber>970</StateNumber>
+      <StateNumber>1083</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
     <foreign-key id="291" parent="279" name="task_created_by_fkey">
       <ColNames>created_by</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16609</ObjectId>
-      <StateNumber>970</StateNumber>
+      <ObjectId>16694</ObjectId>
+      <StateNumber>1083</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16482</RefTableId>
+      <RefTableId>16669</RefTableId>
     </foreign-key>
     <index id="292" parent="279" name="task_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16607</ObjectId>
+      <ObjectId>16692</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>970</StateNumber>
+      <StateNumber>1083</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
     <key id="293" parent="279" name="task_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16608</ObjectId>
+      <ObjectId>16693</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>970</StateNumber>
-      <UnderlyingIndexId>16607</UnderlyingIndexId>
+      <StateNumber>1083</StateNumber>
+      <UnderlyingIndexId>16692</UnderlyingIndexId>
     </key>
     <column id="294" parent="280" name="user_id">
       <DefaultExpression>nextval(&apos;user_user_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>1002</StateNumber>
+      <StateNumber>1081</StateNumber>
       <StoredType>bigint|0s</StoredType>
-      <SequenceId>16614</SequenceId>
+      <SequenceId>16668</SequenceId>
       <TypeId>20</TypeId>
     </column>
     <column id="295" parent="280" name="username">
       <Position>2</Position>
-      <StateNumber>1002</StateNumber>
+      <StateNumber>1081</StateNumber>
       <StoredType>varchar(100)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
     <column id="296" parent="280" name="password">
       <Position>3</Position>
-      <StateNumber>1002</StateNumber>
+      <StateNumber>1081</StateNumber>
       <StoredType>varchar(100)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
     <index id="297" parent="280" name="user_pkey">
       <ColNames>user_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16620</ObjectId>
+      <ObjectId>16674</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1002</StateNumber>
+      <StateNumber>1081</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="298" parent="280" name="user_pkey">
+    <index id="298" parent="280" name="user_username_key">
+      <ColNames>username</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16621</ObjectId>
+      <ObjectId>16676</ObjectId>
+      <StateNumber>1081</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationNames>default</CollationNames>
+      <CollationIds>100</CollationIds>
+      <CollationParentNames>pg_catalog</CollationParentNames>
+    </index>
+    <key id="299" parent="280" name="user_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16675</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1002</StateNumber>
-      <UnderlyingIndexId>16620</UnderlyingIndexId>
+      <StateNumber>1081</StateNumber>
+      <UnderlyingIndexId>16674</UnderlyingIndexId>
     </key>
-    <column id="299" parent="281" name="user_id">
+    <key id="300" parent="280" name="user_username_key">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16677</ObjectId>
+      <StateNumber>1081</StateNumber>
+      <UnderlyingIndexId>16676</UnderlyingIndexId>
+    </key>
+    <column id="301" parent="281" name="user_id">
       <DefaultExpression>nextval(&apos;user_role_user_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>839</StateNumber>
+      <StateNumber>1084</StateNumber>
       <StoredType>bigint|0s</StoredType>
-      <SequenceId>16566</SequenceId>
+      <SequenceId>16699</SequenceId>
       <TypeId>20</TypeId>
     </column>
-    <column id="300" parent="281" name="role_id">
+    <column id="302" parent="281" name="role_id">
       <DefaultExpression>nextval(&apos;user_role_role_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>839</StateNumber>
+      <StateNumber>1084</StateNumber>
       <StoredType>bigint|0s</StoredType>
-      <SequenceId>16567</SequenceId>
+      <SequenceId>16700</SequenceId>
       <TypeId>20</TypeId>
     </column>
-    <foreign-key id="301" parent="281" name="user_role_user_id_fkey">
+    <foreign-key id="303" parent="281" name="user_role_user_id_fkey">
       <ColNames>user_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16577</ObjectId>
-      <StateNumber>839</StateNumber>
+      <ObjectId>16710</ObjectId>
+      <StateNumber>1084</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16482</RefTableId>
+      <RefTableId>16669</RefTableId>
     </foreign-key>
-    <foreign-key id="302" parent="281" name="user_role_role_id_fkey">
+    <foreign-key id="304" parent="281" name="user_role_role_id_fkey">
       <ColNames>role_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16582</ObjectId>
-      <StateNumber>839</StateNumber>
+      <ObjectId>16715</ObjectId>
+      <StateNumber>1084</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16490</RefTableId>
+      <RefTableId>16679</RefTableId>
     </foreign-key>
-    <index id="303" parent="281" name="user_role_pkey">
+    <index id="305" parent="281" name="user_role_pkey">
       <ColNames>user_id
 role_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16575</ObjectId>
+      <ObjectId>16708</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>839</StateNumber>
+      <StateNumber>1084</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="304" parent="281" name="user_role_pkey">
+    <key id="306" parent="281" name="user_role_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16576</ObjectId>
+      <ObjectId>16709</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>839</StateNumber>
-      <UnderlyingIndexId>16575</UnderlyingIndexId>
+      <StateNumber>1084</StateNumber>
+      <UnderlyingIndexId>16708</UnderlyingIndexId>
     </key>
   </database-model>
 </dataSource>

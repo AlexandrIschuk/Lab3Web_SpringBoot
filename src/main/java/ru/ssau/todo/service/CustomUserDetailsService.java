@@ -1,52 +1,49 @@
 package ru.ssau.todo.service;
 
-import org.jspecify.annotations.NonNull;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.ssau.todo.entity.Role;
+import ru.ssau.todo.entity.User;
 import ru.ssau.todo.entity.UserDto;
 import ru.ssau.todo.entity.UserRole;
 import ru.ssau.todo.repository.UserRepository;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     UserRepository userRepository;
     MappingUtils mappingUtils;
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    BCryptPasswordEncoder passwordEncoder;
 
     public CustomUserDetailsService(UserRepository userRepository, MappingUtils mappingUtils, BCryptPasswordEncoder bCryptPasswordEncoder){
         this.userRepository = userRepository;
         this.mappingUtils = mappingUtils;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.passwordEncoder = bCryptPasswordEncoder;
     }
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ru.ssau.todo.entity.User user = userRepository.findUByUsername(username)
+    @NullMarked
+    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findUByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(("User not found: " + username)));
 
-        return User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .roles(String.valueOf(user.getRole()))
-                .build();
+        Set<CustomGrantedAuthority> roles = user.getRole().stream()
+                .map(role -> new CustomGrantedAuthority(role.getRoleId(),role.getRoleName().name()))
+                .collect(Collectors.toSet());
+        return new CustomUserDetails(user,roles);
+
 
     }
 
     public void UserRegister(UserDto userDto){
-        ru.ssau.todo.entity.User user = mappingUtils.mapToUserEntity(userDto);
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        User user = mappingUtils.mapToUserEntity(userDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         if(user.getUsername().equals("admin")){
             user.setRole(Collections.singleton(new Role(1L, UserRole.ROLE_ADMIN)));
         }
@@ -55,4 +52,5 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         userRepository.save(user);
     }
+
 }

@@ -20,8 +20,4 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private UserRole roleName;
 
-//    @ManyToMany
-//    @JsonIgnore
-//    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-//    private List<User> user;
 }

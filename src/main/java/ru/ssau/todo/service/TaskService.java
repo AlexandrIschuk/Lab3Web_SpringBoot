@@ -4,10 +4,8 @@ import org.springframework.stereotype.Service;
 import ru.ssau.todo.entity.Task;
 import ru.ssau.todo.entity.TaskDto;
 import ru.ssau.todo.entity.TaskStatus;
-import ru.ssau.todo.entity.User;
 import ru.ssau.todo.repository.TaskRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,8 +15,6 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final MappingUtils mappingUtils;
 
-    private int activeTasks = 10;
-
     public TaskService(TaskRepository taskRepository, MappingUtils mappingUtils) {
         this.taskRepository = taskRepository;
         this.mappingUtils = mappingUtils;
@@ -26,6 +22,7 @@ public class TaskService {
 
     private void validateCountOfActiveTasks(TaskDto task) {
         long l = countActiveTasksByUserId(task.getCreatedBy());
+        int activeTasks = 10;
         if (l >= activeTasks) {
             throw new IllegalStateException(String.format("User with id %d cannot have more than %d active tasks. Current count: %d", task.getCreatedBy(), activeTasks,l));
         }
@@ -38,6 +35,7 @@ public class TaskService {
 
     public Optional<TaskDto> findById(long id) {
         return Optional.ofNullable(mappingUtils.mapToTaskDto(taskRepository.findById(id).orElseThrow()));
+
     }
 
     public List<TaskDto> findAll(LocalDateTime from, LocalDateTime to, long userId) {
@@ -47,12 +45,16 @@ public class TaskService {
         if(to == null) {
             to = LocalDateTime.now();
         }
+        if(to.isBefore(from)){
+            throw new IllegalStateException("to is before from");
+        }
         List<Task> tasks = taskRepository.findAllFilter(from, to, userId);
         return tasks.stream()
                 .map(mappingUtils::mapToTaskDto)
                 .collect(Collectors.toList());
 
     }
+
     public void taskUpdate(TaskDto task, Task task1){
         task1.setTitle(task.getTitle());
         task1.setStatus(task.getStatus());
