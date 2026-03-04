@@ -1,5 +1,9 @@
 package ru.ssau.todo.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,7 +54,14 @@ public class AuthController {
                 user.getPassword()
         ));
         CustomUserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-        AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails),tokenService.generateRefreshToken(userDetails));
-        return ResponseEntity.ok().body(authToken);
+        String refToken = tokenService.generateRefreshToken(userDetails);
+        ResponseCookie cookie = ResponseCookie.from("REFRESH_TOKEN", refToken)
+                .httpOnly(true)
+                .secure(true)
+                .path("/auth/")
+                .maxAge(604800)
+                .build();
+        AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails),refToken);
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(authToken);
     }
 }
