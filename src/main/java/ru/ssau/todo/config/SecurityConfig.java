@@ -22,6 +22,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/users/register").permitAll()
+                        .requestMatchers("/tasks/stat").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/tasks/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 //.formLogin(Customizer.withDefaults())

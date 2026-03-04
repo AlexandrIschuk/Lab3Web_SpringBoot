@@ -37,8 +37,16 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .map(role -> new CustomGrantedAuthority(role.getRoleId(),role.getRoleName().name()))
                 .collect(Collectors.toSet());
         return new CustomUserDetails(user,roles);
+    }
 
+    public CustomUserDetails loadUserByUserId(Long userId) throws UsernameNotFoundException {
+        User user = userRepository.findUserByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(("User not found: " + userId)));
 
+        Set<CustomGrantedAuthority> roles = user.getRole().stream()
+                .map(role -> new CustomGrantedAuthority(role.getRoleId(),role.getRoleName().name()))
+                .collect(Collectors.toSet());
+        return new CustomUserDetails(user,roles);
     }
 
     public void UserRegister(UserDto userDto){

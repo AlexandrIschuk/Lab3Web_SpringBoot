@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.NoSuchElementException;
 
 @ControllerAdvice
@@ -27,5 +29,23 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<String> dataAccessException(DataAccessException e){
         return ResponseEntity.status(HttpStatus.CONFLICT).body("Data Access Error: " + e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidKeyException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> invalidKeyException(InvalidKeyException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
+    }
+
+    @ExceptionHandler(NoSuchAlgorithmException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> noSuchAlgorithmException(NoSuchAlgorithmException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<String> invalidTokenException(InvalidTokenException e){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: " + e.getMessage());
     }
 }

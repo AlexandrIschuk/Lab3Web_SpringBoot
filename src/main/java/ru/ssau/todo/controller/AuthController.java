@@ -4,15 +4,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.ssau.todo.entity.*;
 import ru.ssau.todo.service.CustomUserDetails;
+import ru.ssau.todo.service.TokenService;
+
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
+    private final TokenService tokenService;
+    public AuthController(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
     @GetMapping("/me")
     public ResponseEntity<UserDto> getAuthUser(@AuthenticationPrincipal CustomUserDetails user) {
@@ -23,5 +32,10 @@ public class AuthController {
         userDto.setUsername(user.getUsername());
         userDto.setRole(roles);
         return ResponseEntity.ok(userDto);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<AuthToken> jwtLogin(@AuthenticationPrincipal CustomUserDetails userDetails) throws NoSuchAlgorithmException, InvalidKeyException {
+        AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails),tokenService.generateRefreshToken(userDetails));
+        return ResponseEntity.ok().body(authToken);
     }
 }
