@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,12 +16,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import ru.ssau.todo.ExceptionHandler.GlobalExceptionHandler;
 import ru.ssau.todo.ExceptionHandler.InvalidTokenException;
+import ru.ssau.todo.ExceptionHandler.RefreshTokenException;
 import ru.ssau.todo.service.CustomUserDetails;
 import ru.ssau.todo.service.CustomUserDetailsService;
 import ru.ssau.todo.service.TokenService;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
+import javax.naming.AuthenticationException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -62,32 +65,25 @@ public class JwtFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             }
             String jwt = authHeader.substring(BEARER_PREFIX.length());
-            String[] token = jwt.split("\\.", 2);
-            String payloadPart = token[0];
-            String signature = token[1];
-            String encodingSignature;
-            encodingSignature = tokenService.encodingSignature(payloadPart);
-            if (!signature.equals(encodingSignature)) {
-                throw new InvalidTokenException("Invalid token");
-            }
-            byte[] decoded =
-                    Base64.getUrlDecoder().decode(payloadPart);
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> payload = mapper.readValue(decoded, new TypeReference<Map<String, Object>>() {
-            });
-            long exp = Long.parseLong(payload.get("exp").toString());
-            if (exp < System.currentTimeMillis()) {
-                throw new InvalidTokenException("The token's validity period has finally disappeared");
+            Map<String, Object> payload = tokenService.getDecodePayload(jwt);
+            if(!payload.containsKey("roles")){
+                throw new RefreshTokenException("Token is not Access token");
             }
             long userId = Long.parseLong(payload.get("userId").toString());
+            long iat = Long.parseLong(payload.get("iat").toString());
+            if(tokenService.getCreateTime() != iat){
+                throw new InvalidTokenException("The token is old");
+            }
             CustomUserDetails userDetails = customUserDetailsService.loadUserByUserId(userId);
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             context.setAuthentication(authToken);
             SecurityContextHolder.setContext(context);
             filterChain.doFilter(request, response);
-        } catch (InvalidTokenException | NoSuchAlgorithmException | InvalidKeyException e) {
+        } catch (InvalidTokenException | NoSuchAlgorithmException | InvalidKeyException | RefreshTokenException e) {
             resolver.resolveException(request, response, null, e);
         }
     }
+
+
 }

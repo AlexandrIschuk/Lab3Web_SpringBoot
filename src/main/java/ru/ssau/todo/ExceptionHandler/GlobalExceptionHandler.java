@@ -49,4 +49,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> invalidTokenException(InvalidTokenException e){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: " + e.getMessage());
     }
+
+    @ExceptionHandler(RefreshTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<String> refreshTokenException(RefreshTokenException e){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: " + e.getMessage());
+    }
 }
