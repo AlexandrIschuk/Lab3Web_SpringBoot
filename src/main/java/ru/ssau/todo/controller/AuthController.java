@@ -1,7 +1,5 @@
 package ru.ssau.todo.controller;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -9,16 +7,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import ru.ssau.todo.ExceptionHandler.RefreshTokenException;
 import ru.ssau.todo.entity.*;
 import ru.ssau.todo.service.CustomUserDetails;
 import ru.ssau.todo.service.CustomUserDetailsService;
 import ru.ssau.todo.service.TokenService;
 
 import javax.naming.AuthenticationException;
-import java.nio.file.AccessDeniedException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -37,8 +32,6 @@ public class AuthController {
         this.userDetailsService = userDetailsService;
     }
 
-
-
     @GetMapping("/me")
     public ResponseEntity<UserDto> getAuthUser(@AuthenticationPrincipal CustomUserDetails user) {
         UserDto userDto = new UserDto();
@@ -49,6 +42,7 @@ public class AuthController {
         userDto.setRole(roles);
         return ResponseEntity.ok(userDto);
     }
+
     @PostMapping("/login")
     public ResponseEntity<AuthToken> jwtLogin(@RequestBody UserDto user) throws NoSuchAlgorithmException, InvalidKeyException {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -66,9 +60,9 @@ public class AuthController {
         AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails),refToken);
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(authToken);
     }
+
     @PostMapping("/refresh")
-    @Transactional(noRollbackFor = {RefreshTokenException.class})
-    public ResponseEntity<String> refreshToken(@CookieValue(value = "REFRESH_TOKEN") String refreshToken) throws NoSuchAlgorithmException, InvalidKeyException, AuthenticationException, AccessDeniedException {
+    public ResponseEntity<String> refreshToken(@CookieValue(value = "REFRESH_TOKEN") String refreshToken) throws NoSuchAlgorithmException, InvalidKeyException, AuthenticationException{
         Map<String,Object> payload = tokenService.getDecodePayload(refreshToken);
         long userId = Long.parseLong(payload.get("userId").toString());
         CustomUserDetails userDetails = userDetailsService.loadUserByUserId(userId);

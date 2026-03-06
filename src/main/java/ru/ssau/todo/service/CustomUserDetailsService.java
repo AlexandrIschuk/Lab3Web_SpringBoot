@@ -1,5 +1,6 @@
 package ru.ssau.todo.service;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,27 +27,26 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.passwordEncoder = bCryptPasswordEncoder;
     }
 
-
     @Override
     @NullMarked
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(("User not found: " + username)));
-
-        Set<CustomGrantedAuthority> roles = user.getRole().stream()
-                .map(role -> new CustomGrantedAuthority(role.getRoleId(),role.getRoleName().name()))
-                .collect(Collectors.toSet());
+        Set<CustomGrantedAuthority> roles = getCustomGrantedAuthorities(user);
         return new CustomUserDetails(user,roles);
     }
 
     public CustomUserDetails loadUserByUserId(Long userId) throws UsernameNotFoundException {
         User user = userRepository.findUserByUserId(userId)
                 .orElseThrow(() -> new UsernameNotFoundException(("User not found: " + userId)));
+        Set<CustomGrantedAuthority> roles = getCustomGrantedAuthorities(user);
+        return new CustomUserDetails(user,roles);
+    }
 
-        Set<CustomGrantedAuthority> roles = user.getRole().stream()
+    private static @NonNull Set<CustomGrantedAuthority> getCustomGrantedAuthorities(User user) {
+        return user.getRole().stream()
                 .map(role -> new CustomGrantedAuthority(role.getRoleId(),role.getRoleName().name()))
                 .collect(Collectors.toSet());
-        return new CustomUserDetails(user,roles);
     }
 
     public void UserRegister(UserDto userDto){

@@ -2,8 +2,7 @@ package ru.ssau.todo.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+
 
 @Data
 @AllArgsConstructor

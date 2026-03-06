@@ -1,6 +1,8 @@
 package ru.ssau.todo.ExceptionHandler;
 
-public class InvalidTokenException extends  RuntimeException{
+import javax.naming.AuthenticationException;
+
+public class InvalidTokenException extends AuthenticationException {
     public InvalidTokenException(String message){
         super(message);
     }

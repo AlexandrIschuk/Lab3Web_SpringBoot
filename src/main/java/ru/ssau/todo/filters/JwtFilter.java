@@ -4,7 +4,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,20 +13,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import ru.ssau.todo.ExceptionHandler.GlobalExceptionHandler;
 import ru.ssau.todo.ExceptionHandler.InvalidTokenException;
-import ru.ssau.todo.ExceptionHandler.RefreshTokenException;
 import ru.ssau.todo.service.CustomUserDetails;
 import ru.ssau.todo.service.CustomUserDetailsService;
 import ru.ssau.todo.service.TokenService;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 
-import javax.naming.AuthenticationException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Map;
 
 
@@ -39,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private CustomUserDetailsService customUserDetailsService;
     private final HandlerExceptionResolver resolver;
 
-    public JwtFilter(TokenService tokenService, @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver, GlobalExceptionHandler globalExceptionHandler) {
+    public JwtFilter(TokenService tokenService, @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
         this.tokenService = tokenService;
         this.resolver = resolver;
     }
@@ -50,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         return path.startsWith("/auth/login") || path.startsWith("/auth/refresh") || path.startsWith("/users/register");
     }
@@ -67,20 +60,20 @@ public class JwtFilter extends OncePerRequestFilter {
             String jwt = authHeader.substring(BEARER_PREFIX.length());
             Map<String, Object> payload = tokenService.getDecodePayload(jwt);
             if(!payload.containsKey("roles")){
-                throw new RefreshTokenException("Token is not Access token");
+                throw new InvalidTokenException("Token is not Access token");
             }
             long userId = Long.parseLong(payload.get("userId").toString());
-            long iat = Long.parseLong(payload.get("iat").toString());
-            if(tokenService.getCreateTime() != iat){
-                throw new InvalidTokenException("The token is old");
-            }
+//            long iat = Long.parseLong(payload.get("iat").toString());
+//            if(tokenService.getCreateTime() != iat){
+//                throw new InvalidTokenException("The token is old");
+//            }
             CustomUserDetails userDetails = customUserDetailsService.loadUserByUserId(userId);
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             context.setAuthentication(authToken);
             SecurityContextHolder.setContext(context);
             filterChain.doFilter(request, response);
-        } catch (InvalidTokenException | NoSuchAlgorithmException | InvalidKeyException | RefreshTokenException e) {
+        } catch (InvalidTokenException | NoSuchAlgorithmException | InvalidKeyException e) {
             resolver.resolveException(request, response, null, e);
         }
     }
