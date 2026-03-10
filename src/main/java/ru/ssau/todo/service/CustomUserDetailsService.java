@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    UserRepository userRepository;
-    MappingUtils mappingUtils;
-    BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final MappingUtils mappingUtils;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public CustomUserDetailsService(UserRepository userRepository, MappingUtils mappingUtils, BCryptPasswordEncoder bCryptPasswordEncoder){
         this.userRepository = userRepository;

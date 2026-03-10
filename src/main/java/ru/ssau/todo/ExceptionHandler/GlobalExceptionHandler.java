@@ -49,4 +49,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: " + e.getMessage());
     }
 
+    @ExceptionHandler(TokenCreatedTimeException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<String> tokenCreatedTimeException(TokenCreatedTimeException e){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: " + e.getMessage());
+    }
+
+    @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<String> arrayIndexOutOfBoundException(ArrayIndexOutOfBoundsException e){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: invalid token");
+    }
+
+
 }

@@ -19,14 +19,14 @@ import java.util.Map;
 @Setter
 @Service
 public class TokenService {
-    //private Long createTime;
+    private Long createTime;
 
     public String generateToken(CustomUserDetails customUserDetails) throws NoSuchAlgorithmException, InvalidKeyException {
         Map<String, Object> payload = new HashMap<>();
         payload.put("userId", customUserDetails.getId());
         payload.put("roles", customUserDetails.getAuthorities());
         payload.put("iat", System.currentTimeMillis());
-        //createTime = System.currentTimeMillis();
+        createTime = System.currentTimeMillis();
         payload.put("exp", System.currentTimeMillis() + 15 * 60 * 1000);
         return generateToken(payload);
     }

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.todo.entity.*;
@@ -26,7 +27,8 @@ public class AuthController {
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
-    public AuthController(TokenService tokenService, AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService) {
+
+    public AuthController(TokenService tokenService, AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, CustomUserDetailsService customUserDetailsService) {
         this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
@@ -69,4 +71,5 @@ public class AuthController {
         String accessToken = tokenService.generateToken(userDetails);
         return ResponseEntity.ok(accessToken);
     }
+
 }
