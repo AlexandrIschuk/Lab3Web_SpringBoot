@@ -14,19 +14,23 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.ssau.todo.filters.JwtFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ru.ssau.todo.service.CustomUserDetailsService;
+
+import java.util.Arrays;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final JwtFilter jwtFilter;
+    //private final JwtFilter jwtFilter;
     private final CustomUserDetailsService userDetailsService;
 
-    public SecurityConfig(@Lazy JwtFilter jwtFilter, @Lazy CustomUserDetailsService userDetailsService) {
-        this.jwtFilter = jwtFilter;
+    public SecurityConfig(/*@Lazy JwtFilter jwtFilter,*/ @Lazy CustomUserDetailsService userDetailsService) {
+        //this.jwtFilter = jwtFilter;
         this.userDetailsService = userDetailsService;
     }
 
@@ -34,31 +38,43 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         return http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/users/register").permitAll()
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/auth/refresh").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/tasks/{id}").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-                .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
-                .authenticationProvider(authProvider())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-//                .httpBasic(Customizer.withDefaults())
+                        //.requestMatchers(HttpMethod.DELETE, "/tasks/{id}").hasRole("ADMIN")
+                        .anyRequest().permitAll())
+                //.sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
+                //.authenticationProvider(authProvider())
+                //.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .httpBasic(Customizer.withDefaults())
                 .build();
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    /*@Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
-    }
+    }*/
 
-    @Bean
+    /*@Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) {
         return authConfig.getAuthenticationManager();
-    }
+    }*/
 
 
     @Bean

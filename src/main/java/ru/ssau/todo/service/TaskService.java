@@ -1,5 +1,6 @@
 package ru.ssau.todo.service;
 
+import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 import ru.ssau.todo.entity.Task;
 import ru.ssau.todo.entity.TaskDto;
@@ -38,7 +39,7 @@ public class TaskService {
 
     }
 
-    public List<TaskDto> findAll(LocalDateTime from, LocalDateTime to, long userId) {
+    public List<TaskDto> findAll(LocalDateTime from, LocalDateTime to, Long userId) {
         if(from == null){
             from = LocalDateTime.of(1970, 1,1,0,0);
         }

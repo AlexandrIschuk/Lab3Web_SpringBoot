@@ -42,7 +42,8 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskDto> getTasks(@RequestParam(required = false) LocalDateTime from, @RequestParam(required = false) LocalDateTime to, @RequestParam Long userId) {
+    public List<TaskDto> getTasks(@RequestParam(required = false) LocalDateTime from, @RequestParam(required = false) LocalDateTime to, @RequestParam(required = false) Long userId) {
+
         return taskService.findAll(from, to, userId);
 
     }

@@ -21,8 +21,8 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
      * @param userId уникальный идентификатор пользователя-владельца.
      * @return список задач, соответствующих критериям поиска. Если ничего не найдено, возвращается пустой список.
      */
-    @Query (nativeQuery = true, value = "SELECT * FROM task WHERE created_by = :userId AND created_at >= :from AND created_at <= :to")
-    List<Task> findAllFilter(LocalDateTime from, LocalDateTime to, long userId);
+    @Query (nativeQuery = true, value = "SELECT * FROM task WHERE (created_by = COALESCE(:userId ,created_by)) AND created_at >= :from AND created_at <= :to")
+    List<Task> findAllFilter(LocalDateTime from, LocalDateTime to, Long userId);
 
     @Query(value = "SELECT t.status, COUNT(t) FROM Task t GROUP BY t.status")
     List<Object[]> countTaskByStatus();
