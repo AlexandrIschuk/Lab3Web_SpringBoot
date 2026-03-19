@@ -1,47 +1,37 @@
 <div class="form-container">
   <h2>
-    <span class="id" [attr.data-id]="[`${task$.id}`]"></span></h2>
+    <span class="id" [attr.data-id]="[`${task$.id}`]"></span>
+  </h2>
 
-  <form #taskForm="ngForm">
-    <!-- Название задачи -->
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="taskName">Название задачи</label>
       <input
         type="text"
         id="taskName"
-        name="taskName"
         class="form-control"
-        [(ngModel)]="task$.title"
-        #taskName="ngModel"
-        required
-        minlength="3"
+        formControlName="title"
         placeholder="Введите название задачи">
     </div>
 
-    <!-- Статус задачи -->
     <div class="form-group">
       <label for="taskStatus">Статус</label>
       <select
         id="taskStatus"
-        name="taskStatus"
         class="form-control"
-        [(ngModel)]="task$.status"
-        #taskStatus="ngModel"
-        required>
+        formControlName="status">
 
-        <option *ngFor="let status of statuses" [value]="status.value">
+        <option *ngFor="let status of statuses" [ngValue]="status.value">
           {{ status.label }}
         </option>
       </select>
+
     </div>
 
-    <!-- Кнопки -->
     <div class="button-group">
       <button
         type="submit"
-        class="btn btn-primary"
-        [disabled]="taskForm.invalid"
-        (click)="update(task$)">
+        class="btn btn-primary">
         Сохранить
       </button>
 
