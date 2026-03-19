@@ -1,0 +1,39 @@
+<div class="buttons">
+  <button class="edit-btn" [routerLink]="['new']" >Создать задачу</button>
+  <button class="edit-btn" [routerLink]="['']" (click)="logout()">Выйти</button>
+</div>
+<table class="tasks-table">
+  <thead>
+  <tr>
+    <th>Название задачи</th>
+    <th>Создатель</th>
+    <th>ID задачи</th>
+    <th>Дата создания</th>
+    <th>Статус</th>
+    <th>Действия</th>
+  </tr>
+  </thead>
+  <tbody>
+    @if (tasks$ | async; as tasks){
+      @for (task of tasks; track task.id){
+        <tr>
+          <td>{{task.title}}</td>
+          <td>{{task.createdBy}}</td>
+          <td>{{task.id}}</td>
+          <td>{{task.createdAt | date:'dd.MM.yyyy HH:mm'}}</td>
+          <td>
+            <span class="status" [attr.data-status]="[`${task.status}`]"></span>
+          </td>
+          <td class="actions">
+            <button class="edit-btn" [routerLink]="[`${task.id}`]" (click)="setTask(task)">Изменить</button>
+            <button class="delete-btn" (click)="deleteTask(task)">Удалить</button>
+          </td>
+        </tr>
+      }
+    }
+  </tbody>
+</table>
+<div *ngIf="errorMessage" class="alert alert-error">
+  {{ errorMessage }}
+  <button type="button" class="alert-close" (click)="errorMessage = ''">×</button>
+</div>

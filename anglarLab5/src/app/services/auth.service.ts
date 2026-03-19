@@ -1,11 +1,15 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {User} from '../user';
+import {User} from '../interfaces/user';
+import {Environment} from './eviroment';
+import {Observable} from 'rxjs';
+import {AuthResponse} from '../interfaces/auth.response';
 
 @Injectable({providedIn: 'root'})
 export class AuthService{
-  constructor(private _httpClient: HttpClient) { }
-  public login(){
-    //return this._httpClient.post('http://localhost:8080/login');
+  constructor(private _httpClient: HttpClient, private environment: Environment) { }
+  public login(user: User):Observable<AuthResponse>{
+    return this._httpClient.post<AuthResponse>(`${this.environment.getUrl()}/auth/login`, user);
   }
+
 }

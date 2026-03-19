@@ -1,4 +1,3 @@
-/*
 package ru.ssau.todo.filters;
 
 import jakarta.servlet.FilterChain;
@@ -20,6 +19,7 @@ import ru.ssau.todo.service.CustomUserDetails;
 import ru.ssau.todo.service.CustomUserDetailsService;
 import ru.ssau.todo.service.TokenService;
 
+import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -56,8 +56,12 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String authHeader = request.getHeader(HEADER_NAME);
+            if (authHeader == null) {
+                throw new InvalidTokenException("Token is not Access token");
+            }
             if (!authHeader.startsWith(BEARER_PREFIX)) {
                 filterChain.doFilter(request, response);
+
             }
             String jwt = authHeader.substring(BEARER_PREFIX.length());
             Map<String, Object> payload = tokenService.getDecodePayload(jwt);
@@ -85,4 +89,3 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
 }
-*/

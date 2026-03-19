@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/auth")
 public class AuthController {
     private final TokenService tokenService;
-    //private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
 
-    public AuthController(TokenService tokenService/*, AuthenticationManager authenticationManager*/, CustomUserDetailsService userDetailsService, CustomUserDetailsService customUserDetailsService) {
+    public AuthController(TokenService tokenService, AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, CustomUserDetailsService customUserDetailsService) {
         this.tokenService = tokenService;
-        //this.authenticationManager = authenticationManager;
+        this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
     }
 
@@ -47,10 +47,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthToken> jwtLogin(@RequestBody UserDto user) throws NoSuchAlgorithmException, InvalidKeyException {
-        /*authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 user.getUsername(),
                 user.getPassword()
-        ));*/
+        ));
         CustomUserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         String refToken = tokenService.generateRefreshToken(userDetails);
         ResponseCookie cookie = ResponseCookie.from("REFRESH_TOKEN", refToken)
@@ -59,7 +59,7 @@ public class AuthController {
                 .path("/auth/")
                 .maxAge(604800)
                 .build();
-        AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails),refToken);
+        AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails));
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(authToken);
     }
 

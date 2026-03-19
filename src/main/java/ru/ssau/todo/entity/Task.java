@@ -1,5 +1,6 @@
 package ru.ssau.todo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +31,7 @@ public class Task {
     @JoinColumn(name = "created_by")
     private User createdBy;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     @CurrentTimestamp
     private LocalDateTime createdAt;
 
