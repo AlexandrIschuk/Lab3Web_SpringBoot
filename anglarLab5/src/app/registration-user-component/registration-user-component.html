@@ -1,0 +1,66 @@
+<div class="login-container">
+  <form class="login-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <h2 class="login-title">Регистрация</h2>
+    <div class="form-group">
+      <label for="username">Логин</label>
+      <input
+        type="text"
+        id="username"
+        class="form-control"
+        formControlName="username"
+        placeholder="Введите логин"
+        [class.is-invalid]="username?.invalid && username?.touched">
+      <div *ngIf="username?.invalid && username?.touched" class="validation-error">
+        <small *ngIf="username?.errors?.['required']">Логин обязателен</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Пароль</label>
+      <div class="password-wrapper">
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="form-control"
+          formControlName="password"
+          placeholder="Введите пароль"
+          [class.is-invalid]="password?.invalid && password?.touched">
+      <div *ngIf="password?.invalid && password?.touched" class="validation-error">
+        <small *ngIf="password?.errors?.['required']">Пароль обязателен</small>
+      </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Подтверждение пароля</label>
+      <div class="password-wrapper">
+        <input
+          type="password"
+          id="confirmPassword"
+          class="form-control"
+          formControlName="confirmPassword"
+          placeholder="Подтвердите пароль"
+          [class.is-invalid]="confirmPassword?.invalid && confirmPassword?.touched">
+        <div *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="validation-error">
+          <small *ngIf="confirmPassword?.errors?.['required']">Подтверждение пароля обязательно</small>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="errorMessage"  class="alert alert-error">
+      {{ errorMessage }}
+      <button type="button" class="alert-close" (click)="errorMessage = ''">×</button>
+    </div>
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+    <div>
+      <button type="submit" class="login-btn">
+        <span>Зарегистрироваться</span>
+      </button>
+      <button type="button" class="login-btn" (click)="onCancel()">
+        Отмена
+      </button>
+    </div>
+  </form>
+</div>
