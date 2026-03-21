@@ -17,6 +17,7 @@ import ru.ssau.todo.service.TokenService;
 import javax.naming.AuthenticationException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,21 +56,23 @@ public class AuthController {
         String refToken = tokenService.generateRefreshToken(userDetails);
         ResponseCookie cookie = ResponseCookie.from("REFRESH_TOKEN", refToken)
                 .httpOnly(true)
-                .secure(true)
-                .path("/auth/")
-                .maxAge(604800)
+                .secure(false)
+                .sameSite("None")
+                .path("/")
+                .maxAge(Duration.ofDays(7))
+                .domain("localhost")
                 .build();
         AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails));
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(authToken);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refreshToken(@CookieValue(value = "REFRESH_TOKEN") String refreshToken) throws NoSuchAlgorithmException, InvalidKeyException, AuthenticationException{
+    public ResponseEntity<AuthToken> refreshToken(@CookieValue(value = "REFRESH_TOKEN") String refreshToken) throws NoSuchAlgorithmException, InvalidKeyException, AuthenticationException{
         Map<String,Object> payload = tokenService.getDecodePayload(refreshToken);
         long userId = Long.parseLong(payload.get("userId").toString());
         CustomUserDetails userDetails = userDetailsService.loadUserByUserId(userId);
-        String accessToken = tokenService.generateToken(userDetails);
-        return ResponseEntity.ok(accessToken);
+        AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails));
+        return ResponseEntity.ok(authToken);
     }
 
 }

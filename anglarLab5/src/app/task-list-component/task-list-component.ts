@@ -20,7 +20,6 @@ import {HttpErrorResponse} from '@angular/common/http';
 export class TaskListComponent implements OnInit{
 
     public tasks$?: Observable<Task[]>;
-  private router: any;
   protected errorMessage = '';
 
     constructor(private taskService: TaskService, private cd: ChangeDetectorRef) { }

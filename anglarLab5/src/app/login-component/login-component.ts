@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component} from '@angular/core';
 import {User} from '../interfaces/user';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthService} from '../services/auth.service';
-import {Router} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import {NgIf} from '@angular/common';
 
@@ -11,7 +11,8 @@ import {NgIf} from '@angular/common';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf
+    NgIf,
+    RouterLink
   ],
   templateUrl: './login-component.html',
   styleUrl: './login-component.css',
