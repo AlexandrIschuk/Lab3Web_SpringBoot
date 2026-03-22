@@ -27,7 +27,7 @@ public class TokenService {
         payload.put("roles", customUserDetails.getAuthorities());
         payload.put("iat", System.currentTimeMillis());
         createTime = System.currentTimeMillis();
-        payload.put("exp", System.currentTimeMillis() + 1 * 10 * 1000);
+        payload.put("exp", System.currentTimeMillis() + 5 * 60 * 1000);
         return generateToken(payload);
     }
     public String generateRefreshToken(CustomUserDetails customUserDetails) throws NoSuchAlgorithmException, InvalidKeyException {
