@@ -37,7 +37,7 @@ export class TaskListComponent implements OnInit{
           );
         }
         this.cd.detectChanges();
-        this.errorMessage = ''; // Очищаем сообщение об ошибке
+        this.errorMessage = '';
       },
       error: (error: HttpErrorResponse) => {
         if(error.status == 403){

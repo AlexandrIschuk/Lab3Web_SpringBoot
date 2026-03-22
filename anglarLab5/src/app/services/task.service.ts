@@ -13,6 +13,10 @@ export class TaskService{
     return this._httpClient.get<Task[]>(`${this.environment.getUrl()}/tasks`);
   }
 
+  public getTask(taskId: String | null): Observable<Task> {
+    return this._httpClient.get<Task>(`${this.environment.getUrl()}/tasks/${taskId}`);
+  }
+
   public deleteTask(taskId: number) {
     return this._httpClient.delete(`${this.environment.getUrl()}/tasks/${taskId}`)
   }
@@ -20,9 +24,6 @@ export class TaskService{
     this.taskInit = task;
   }
 
-  public getTask(): Task{
-    return this.taskInit;
-  }
   public clearTask(){
     this.taskInit = {id: 0, title: " ",status: " ",createdBy: 0, createdAt: new Date()};
   }

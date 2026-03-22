@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
 import {User} from '../interfaces/user';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../services/auth.service';
 import {Router, RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -23,8 +23,12 @@ export class LoginComponent{
 
   constructor(private fb: FormBuilder, private cd: ChangeDetectorRef,private router: Router, private authService: AuthService) {
     this.loginForm = this.fb.group({
-      username: [''],
-      password: [''],
+      username: ['',[
+        Validators.required
+      ]],
+      password: ['',[
+        Validators.required
+      ]],
     });
   }
 
@@ -36,6 +40,7 @@ export class LoginComponent{
       this.authService.login(user).subscribe({
         next: (response) => {
           sessionStorage.setItem('auth_token', response.token);
+          sessionStorage.setItem('refresh_token', response.refreshToken);
           this.router.navigate(['/tasks']);
         },
         error: (error: HttpErrorResponse) => {
@@ -49,4 +54,6 @@ export class LoginComponent{
       );
     }
   }
+  get username() { return this.loginForm.get('username'); }
+  get password() { return this.loginForm.get('password'); }
 }

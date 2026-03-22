@@ -16,4 +16,7 @@
       <module name="todo" options="-parameters" />
     </option>
   </component>
+  <component name="TypeScriptCompiler">
+    <option name="nodeInterpreterTextField" value="docker://node:24-alpine/node" />
+  </component>
 </project>

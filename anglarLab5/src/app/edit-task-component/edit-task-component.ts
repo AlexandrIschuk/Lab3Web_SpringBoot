@@ -1,23 +1,24 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Task} from '../interfaces/task';
-import {Location, NgForOf} from '@angular/common';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Location, NgForOf, NgIf} from '@angular/common';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TaskService} from '../services/task.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-edit-task-component',
   imports: [
     FormsModule,
     NgForOf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgIf
   ],
   templateUrl: './edit-task-component.html',
   styleUrl: './edit-task-component.css',
 })
 export class EditTaskComponent implements OnInit{
-  task$: Task;
+  task$!: Task;
   taskForm: FormGroup;
-  taskId: number;
 
   statuses = [
     { value: 'OPEN', label: 'Открыта' },
@@ -27,28 +28,30 @@ export class EditTaskComponent implements OnInit{
   ];
 
 
-  constructor(private taskService: TaskService, private location: Location,private fb: FormBuilder) {
-    this.task$ = this.taskService.getTask();
+  constructor(private taskService: TaskService,private route: ActivatedRoute, private location: Location,private fb: FormBuilder) {
     this.taskForm = this.fb.group({
-      title: [''],
-      status: ['']
+      title: ['',[
+        Validators.required
+      ]],
+      status: ['',[
+        Validators.required
+      ]]
     });
-    this.taskId = this.task$?.id;
   }
 
   ngOnInit() {
-    if (this.task$) {
-      this.taskForm.patchValue({
-        title: this.task$.title,
-        status: this.task$.status
-      });
-    }
+    const id = this.route.snapshot.paramMap.get('taskId');
+    console.log(id);
+    this.taskService.getTask(id).subscribe((response) => {
+      this.task$ = response;
+    });
   }
+
   onSubmit() {
     if (this.taskForm.valid) {
       const updatedTask: Task = {
-        ...this.task$, // сохраняем остальные поля
-        ...this.taskForm.value // перезаписываем измененные
+        ...this.task$,
+        ...this.taskForm.value
       };
       this.update(updatedTask);
     }
@@ -67,6 +70,6 @@ export class EditTaskComponent implements OnInit{
     }else {
       this.taskService.updateTask(task).subscribe(() => this.onCancel());
     }
-
   }
+    get title() {return this.taskForm.get('title');}
 }

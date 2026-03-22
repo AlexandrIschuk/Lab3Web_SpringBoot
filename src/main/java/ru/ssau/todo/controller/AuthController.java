@@ -62,16 +62,16 @@ public class AuthController {
                 .maxAge(Duration.ofDays(7))
                 .domain("localhost")
                 .build();
-        AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails));
+        AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails),tokenService.generateRefreshToken(userDetails));
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(authToken);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AuthToken> refreshToken(@CookieValue(value = "REFRESH_TOKEN") String refreshToken) throws NoSuchAlgorithmException, InvalidKeyException, AuthenticationException{
-        Map<String,Object> payload = tokenService.getDecodePayload(refreshToken);
+    public ResponseEntity<AuthToken> refreshToken(@RequestBody String token) throws NoSuchAlgorithmException, InvalidKeyException, AuthenticationException{
+        Map<String,Object> payload = tokenService.getDecodePayload(token);
         long userId = Long.parseLong(payload.get("userId").toString());
         CustomUserDetails userDetails = userDetailsService.loadUserByUserId(userId);
-        AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails));
+        AuthToken authToken = new AuthToken(tokenService.generateToken(userDetails),null);
         return ResponseEntity.ok(authToken);
     }
 

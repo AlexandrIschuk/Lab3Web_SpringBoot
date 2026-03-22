@@ -12,8 +12,8 @@ export class AuthService{
     return this._httpClient.post<AuthResponse>(`${this.environment.getUrl()}/auth/login`, user);
   }
 
-  public refreshToken():Observable<AuthResponse>{
-    return this._httpClient.post<AuthResponse>(`${this.environment.getUrl()}/auth/refresh`,null, {withCredentials: true});
+  public refreshToken(refreshToken: String | null):Observable<AuthResponse>{
+    return this._httpClient.post<AuthResponse>(`${this.environment.getUrl()}/auth/refresh`,refreshToken, {withCredentials: true});
   }
 
 

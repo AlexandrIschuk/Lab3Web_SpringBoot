@@ -15,6 +15,17 @@
 
 }
 
+.validation-error {
+  color: #dc3545;
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+.validation-error small {
+  display: block;
+  margin-top: 3px;
+}
+
 .id {
   display: inline;
 }
