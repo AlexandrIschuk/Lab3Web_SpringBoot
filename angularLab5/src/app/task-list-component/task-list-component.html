@@ -1,0 +1,30 @@
+<div class="buttons">
+  <button class="edit-btn" [routerLink]="['new']" >Создать задачу</button>
+  <button class="edit-btn" [routerLink]="['']" (click)="logout()">Выйти</button>
+</div>
+<table class="tasks-table">
+  <thead>
+  <tr>
+    <th>Название задачи</th>
+    <th>Создатель</th>
+    <th>ID задачи</th>
+    <th>Дата создания</th>
+    <th>Статус</th>
+    <th>Действия</th>
+  </tr>
+  </thead>
+  <tbody>
+    @if (tasks$ | async; as tasks){
+      @for (task of tasks; track task.id){
+        <tr app-task-component
+            [task]="task"
+            (delete)="deleteTask($event)">
+        </tr>
+      }
+    }
+  </tbody>
+</table>
+<div *ngIf="errorMessage" class="alert alert-error">
+  {{ errorMessage }}
+  <button type="button" class="alert-close" (click)="errorMessage = ''">×</button>
+</div>
