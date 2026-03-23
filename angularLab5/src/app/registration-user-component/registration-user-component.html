@@ -10,9 +10,13 @@
         formControlName="username"
         placeholder="Введите логин"
         [class.is-invalid]="username?.invalid && username?.touched">
-      <div *ngIf="username?.invalid && username?.touched" class="validation-error">
-        <small *ngIf="username?.errors?.['required']">Логин обязателен</small>
+      @if (username?.invalid && username?.touched){
+      <div class="validation-error">
+        @if (username?.errors?.['required']){
+          <small>Логин обязателен</small>
+        }
       </div>
+    }
     </div>
 
     <div class="form-group">
@@ -26,9 +30,13 @@
           formControlName="password"
           placeholder="Введите пароль"
           [class.is-invalid]="password?.invalid && password?.touched">
-      <div *ngIf="password?.invalid && password?.touched" class="validation-error">
-        <small *ngIf="password?.errors?.['required']">Пароль обязателен</small>
-      </div>
+        @if (password?.invalid && password?.touched){
+          <div class="validation-error">
+            @if (password?.errors?.['required']){
+              <small>Пароль обязателен</small>
+            }
+          </div>
+        }
       </div>
     </div>
 
@@ -42,18 +50,26 @@
           formControlName="confirmPassword"
           placeholder="Подтвердите пароль"
           [class.is-invalid]="confirmPassword?.invalid && confirmPassword?.touched">
-        <div *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="validation-error">
-          <small *ngIf="confirmPassword?.errors?.['required']">Подтверждение пароля обязательно</small>
-        </div>
+        @if (confirmPassword?.invalid && confirmPassword?.touched){
+          <div class="validation-error">
+            @if (confirmPassword?.errors?.['required']){
+              <small>Подтверждение пароля обязательно</small>
+            }
+          </div>
+        }
       </div>
     </div>
-    <div *ngIf="errorMessage"  class="alert alert-error">
-      {{ errorMessage }}
-      <button type="button" class="alert-close" (click)="errorMessage = ''">×</button>
-    </div>
-    <div *ngIf="successMessage" class="alert alert-success">
-      {{ successMessage }}
-    </div>
+    @if (errorMessage) {
+      <div  class="alert alert-error">
+        {{ errorMessage }}
+        <button type="button" class="alert-close" (click)="errorMessage = ''">×</button>
+      </div>
+    }
+    @if (successMessage) {
+      <div class="alert alert-success">
+        {{ successMessage }}
+      </div>
+    }
     <div>
       <button type="submit" class="login-btn">
         <span>Зарегистрироваться</span>

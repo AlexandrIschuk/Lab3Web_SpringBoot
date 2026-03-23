@@ -24,7 +24,10 @@
     }
   </tbody>
 </table>
-<div *ngIf="errorMessage" class="alert alert-error">
-  {{ errorMessage }}
-  <button type="button" class="alert-close" (click)="errorMessage = ''">×</button>
-</div>
+@if (errorMessage) {
+  <div class="alert alert-error">
+    {{ errorMessage }}
+    <button type="button" class="alert-close" (click)="errorMessage = ''">×</button>
+  </div>
+}
+

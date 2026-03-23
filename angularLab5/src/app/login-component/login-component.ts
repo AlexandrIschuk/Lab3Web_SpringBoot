@@ -4,14 +4,12 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {AuthService} from '../services/auth.service';
 import {Router, RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
-import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-login-component',
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf,
     RouterLink
   ],
   templateUrl: './login-component.html',

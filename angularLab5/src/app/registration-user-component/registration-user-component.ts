@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
-import {Location, NgIf} from '@angular/common';
+import {Location} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {User} from '../interfaces/user';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -8,8 +8,7 @@ import {UserService} from '../services/user.service';
 @Component({
   selector: 'app-registration-user-component',
   imports: [
-    ReactiveFormsModule,
-    NgIf
+    ReactiveFormsModule
   ],
   templateUrl: './registration-user-component.html',
   styleUrl: './registration-user-component.css',

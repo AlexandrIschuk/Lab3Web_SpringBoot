@@ -13,9 +13,13 @@
         formControlName="title"
         placeholder="Введите название задачи"
         [class.is-invalid]="title?.invalid && title?.touched">
-      <div *ngIf="title?.invalid && title?.touched" class="validation-error">
-        <small *ngIf="title?.errors?.['required']">Название задачи обязательно</small>
-      </div>
+      @if (title?.invalid && title?.touched){
+        <div class="validation-error">
+          @if (title?.errors?.['required']){
+            <small>Название задачи обязательно</small>
+          }
+        </div>
+      }
     </div>
 
     <div class="form-group">
@@ -23,12 +27,21 @@
       <select
         id="taskStatus"
         class="form-control"
-        formControlName="status">
-
-        <option *ngFor="let status of statuses" [ngValue]="status.value">
-          {{ status.label }}
-        </option>
+        formControlName="status"
+        [class.is-invalid]="status?.invalid && status?.touched">
+        @for (status of statuses; track status.value) {
+          <option [ngValue]="status.value">
+            {{ status.label }}
+          </option>
+        }
       </select>
+      @if (status?.invalid && status?.touched){
+        <div class="validation-error">
+          @if (status?.errors?.['required']){
+            <small>Статус обязателен</small>
+          }
+        </div>
+      }
 
     </div>
 

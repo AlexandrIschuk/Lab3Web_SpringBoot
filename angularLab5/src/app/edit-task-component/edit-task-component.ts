@@ -1,6 +1,6 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Task} from '../interfaces/task';
-import {AsyncPipe, Location, NgForOf, NgIf} from '@angular/common';
+import {Location} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TaskService} from '../services/task.service';
 import { ActivatedRoute } from '@angular/router';
@@ -10,9 +10,7 @@ import {HttpErrorResponse} from '@angular/common/http';
   selector: 'app-edit-task-component',
   imports: [
     FormsModule,
-    NgForOf,
     ReactiveFormsModule,
-    NgIf,
   ],
   templateUrl: './edit-task-component.html',
   styleUrl: './edit-task-component.css',
@@ -43,7 +41,7 @@ export class EditTaskComponent implements OnInit{
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('taskId');
     console.log(id);
-    this.taskService.getTask(id).pipe().subscribe({
+    this.taskService.getTask(id).subscribe({
       next:(response) => {
         this.task$ = response;
         if (this.task$) {
@@ -56,7 +54,7 @@ export class EditTaskComponent implements OnInit{
       error:(error: HttpErrorResponse) => {
         if(error.status == 404){
           this.location.go('tasks');
-          window.location.reload();
+
         }
       }
     });
@@ -73,7 +71,6 @@ export class EditTaskComponent implements OnInit{
 
   }
 
-
   protected onCancel() {
     this.location.back();
     this.taskService.clearTask();
@@ -86,5 +83,7 @@ export class EditTaskComponent implements OnInit{
       this.taskService.updateTask(task).subscribe(() => this.onCancel());
     }
   }
-    get title() {return this.taskForm.get('title');}
+  get title() {return this.taskForm.get('title');}
+  get status() {return this.taskForm.get('status');}
+
 }

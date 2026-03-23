@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from "@angular/core";
 import {TaskService} from '../services/task.service';
 import {map, Observable} from 'rxjs';
 import {Task} from '../interfaces/task';
-import {AsyncPipe, NgIf} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import {TaskComponent} from '../task-component/task-component';
@@ -12,7 +12,6 @@ import {TaskComponent} from '../task-component/task-component';
   imports: [
     AsyncPipe,
     RouterLink,
-    NgIf,
     TaskComponent
   ],
   templateUrl: './task-list-component.html',
